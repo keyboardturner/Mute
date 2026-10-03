@@ -1,0 +1,51 @@
+## Interface: 120100
+## Author: Keyboardturner
+## Version: @project-version@
+## Title: Mute
+## Notes: Adds mute functions in the game similar to an expanded ignore system.
+## SavedVariables: MuteList_DB, WatcherData_DB
+## IconAtlas: voicechat-icon-speaker-mute
+## X-Curse-Project-ID: 
+## X-WoWI-ID: 
+## X-Wago-ID: 
+
+## Title-enUS: Mute
+## Notes-enUS: Adds mute functions in the game similar to an expanded ignore system.
+## Title-esES: Silenciar
+## Notes-esES: Añade funciones de silencio al juego, similares a un sistema de ignorados ampliado.
+## Title-esMX: Silenciar
+## Notes-esMX: Añade funciones de silencio al juego, similares a un sistema de ignorados ampliado.
+## Title-deDE: Stumm
+## Notes-deDE: Fügt dem Spiel Stummschaltungsfunktionen hinzu, ähnlich einem erweiterten Ignoriersystem.
+## Title-frFR: Muet
+## Notes-frFR: Ajoute des fonctions de silence au jeu, similaires à un système d’ignorés étendu.
+## Title-itIT: Silenzia
+## Notes-itIT: Aggiunge funzioni di silenziamento al gioco, simili a un sistema di ignorati ampliato.
+## Title-ptBR: Silenciar
+## Notes-ptBR: Adiciona funções de silêncio ao jogo, semelhantes a um sistema de ignorados expandido.
+## Title-ruRU: Отключить звук
+## Notes-ruRU: Добавляет в игру функции заглушения, аналогичные расширенной системе игнорирования.
+## Title-koKR: 무음
+## Notes-koKR: 확장된 무시 시스템과 유사한 음소거 기능을 게임에 추가합니다.
+## Title-zhCN: 禁音
+## Notes-zhCN: 为游戏添加类似于增强版屏蔽系统的屏蔽功能。
+## Title-zhTW: 消音
+## Notes-zhTW: 為遊戲新增類似於擴充版封鎖系統的封鎖功能。
+
+## Category-enUS: Chat
+## Category-deDE: Chat
+## Category-esES: Chat
+## Category-esMX: Chat
+## Category-frFR: Discussion
+## Category-itIT: Chat
+## Category-koKR: 대화
+## Category-ptBR: Bate-papo
+## Category-ruRU: Чат
+## Category-zhCN: 聊天
+## Category-zhTW: 對話
+
+Localization.lua
+Muter.lua
+Watcher.lua
+TermUI.lua
+MuteUI.lua
