@@ -866,3 +866,22 @@ for _, value in ipairs(chatTargets) do
 		end
 	end);
 end
+
+-- API for addons (Artificer)
+local apiListeners = {};
+MuteAddonAPI = {
+	IsMuted = function(name)
+		if type(name) ~= "string" then return false; end
+		return Muter:IsMuted(name) and true or false;
+	end,
+	RegisterCallback = function(fn)
+		if type(fn) == "function" then
+			apiListeners[#apiListeners + 1] = fn;
+		end
+	end,
+	Fire = function()
+		for _, fn in ipairs(apiListeners) do
+			fn();
+		end
+	end,
+};
