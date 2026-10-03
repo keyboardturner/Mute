@@ -5,9 +5,9 @@
 ## Notes: Adds mute functions in the game similar to an expanded ignore system.
 ## SavedVariables: MuteList_DB, WatcherData_DB
 ## IconAtlas: voicechat-icon-speaker-mute
-## X-Curse-Project-ID: 
+## X-Curse-Project-ID: 1716593
 ## X-WoWI-ID: 
-## X-Wago-ID: 
+## X-Wago-ID: vNAWm8Ko
 
 ## Title-enUS: Mute
 ## Notes-enUS: Adds mute functions in the game similar to an expanded ignore system.
