@@ -139,7 +139,7 @@ if LOCALE == "esES" or LOCALE == "esMX" then
 	L["SLASH_CHAT_MUTE1"] = SLASH_CHAT_MUTE1
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/silenciarlista"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "Ahora se silenciará a %s."
 	L["Ignore_Removed"] = "Ya no se silenciará a %s."
@@ -244,7 +244,7 @@ if LOCALE == "deDE" then
 	L["SLASH_CHAT_MUTE1"] = SLASH_CHAT_MUTE1
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/stummelliste"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "%s wird nun stummgeschaltet."
 	L["Ignore_Removed"] = "%s wird nicht mehr stummgeschaltet."
@@ -349,7 +349,7 @@ if LOCALE == "frFR" then
 	L["SLASH_CHAT_MUTE1"] = SLASH_CHAT_MUTE1
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/muetliste"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "%s est désormais réduit au silence."
 	L["Ignore_Removed"] = "%s n'est plus réduit au silence."
@@ -453,7 +453,7 @@ if LOCALE == "itIT" then
 	L["SLASH_CHAT_MUTE1"] = SLASH_CHAT_MUTE1
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/silenzialista"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "%s è ora silenziato."
 	L["Ignore_Removed"] = "%s non è più silenziato."
@@ -557,7 +557,7 @@ if LOCALE == "ptBR" then
 	L["SLASH_CHAT_MUTE1"] = SLASH_CHAT_MUTE1
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/silenciarlista"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "%s agora está silenciado."
 	L["Ignore_Removed"] = "%s não está mais silenciado."
@@ -663,7 +663,7 @@ if LOCALE == "ruRU" then
 	L["SLASH_CHAT_MUTE1"] = SLASH_CHAT_MUTE1
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/отключитьзвуксписок"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "%s теперь заглушён."
 	L["Ignore_Removed"] = "%s больше не заглушён."
@@ -767,7 +767,7 @@ if LOCALE == "koKR" then
 	L["SLASH_CHAT_MUTE1"] = "/무음"
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/무음목록"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "%s 님을 음소거합니다."
 	L["Ignore_Removed"] = "%s 님의 음소거를 해제합니다."
@@ -871,7 +871,7 @@ if LOCALE == "zhCN" then
 	L["SLASH_CHAT_MUTE1"] = "/禁音"
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/禁音列表"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "现在将屏蔽 %s。"
 	L["Ignore_Removed"] = "不再屏蔽 %s。"
@@ -975,7 +975,7 @@ if LOCALE == "zhTW" then
 	L["SLASH_CHAT_MUTE1"] = "/消音"
 	L["SLASH_CHAT_MUTE4"] = "/mute"
 	L["MuteSlashHelp"] = L["SLASH_CHAT_MUTE1"] .." ".. CALENDAR_PLAYER_NAME
-	L["SLASH_CHAT_MUTELIST1"] = "/mutelist"
+	L["SLASH_CHAT_MUTELIST1"] = "/消音列表"
 	L["SLASH_CHAT_MUTELIST2"] = "/mutelist"
 	L["Ignore_Added"] = "現在將會封鎖 %s。"
 	L["Ignore_Removed"] = "不再封鎖 %s。"
