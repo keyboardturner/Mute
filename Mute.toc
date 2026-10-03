@@ -6,7 +6,7 @@
 ## SavedVariables: MuteList_DB, WatcherData_DB
 ## IconAtlas: voicechat-icon-speaker-mute
 ## X-Curse-Project-ID: 1716593
-## X-WoWI-ID: 
+## X-WoWI-ID: 27235
 ## X-Wago-ID: vNAWm8Ko
 
 ## Title-enUS: Mute
