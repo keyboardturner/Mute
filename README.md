@@ -8,6 +8,7 @@ Mute is integrated into the Ignore window within the Friends/Social UI, as well 
 * **Guild Muting:** Guilds can be specified to cover a wide range of muted players, however it may require having seen a player in that guild for it to work (such as seen via nameplate or /who info).
 * **Guild Member Exceptions:** Specific players within a guild can be whitelisted from a guild mute. They won't be excempt from the terms filter.
 * **Ignore Frame:** The default Ignore frame will now have some tabs for Mute and Terms, and it resizes the frame a bit since it was a very small frame to begin with.
+* **Blocking Interactions**: Certain interactions with muted players will be blocked, such as invite/guild invite, trade, and duel.
 
 ### Term Filtering
 Messages based on specific keywords or patterns are also muted/blocked. There's a few different settings available for it:
