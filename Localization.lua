@@ -78,6 +78,8 @@ if LOCALE == "enUS" then
 	L["Setting_PauseWatcherTT"] = "Pauses gathering new entries. Entries already gathered stay muted."
 	L["Setting_UseNetwork"] = "Use Channel Network"
 	L["Setting_UseNetworkTT"] = "Utilizes the OlympusNet channel to gather a mute list for Watcher.\nMutes will still be gathered via mouseover, /who info, nameplate, and other unit sources."
+	L["Setting_HideInvites"] = "Decline Interactions"
+	L["Setting_HideInvitesTT"] = "Automatically declines certain interactions sent by muted members such as invites, guild invites, duels, and trade."
 
 	L["Term_Contains"] = "Contains"
 	L["Term_ContainsTT"] = "Matches anywhere in a message, even inside other words. \"gold\" also matches \"golden\"."
@@ -194,6 +196,8 @@ if LOCALE == "esES" or LOCALE == "esMX" then
 	L["Setting_PauseWatcherTT"] = "Pausa la recopilación de nuevas entradas. Las entradas ya recopiladas permanecen silenciadas."
 	L["Setting_UseNetwork"] = "Usar red de canales"
 	L["Setting_UseNetworkTT"] = "Utiliza el canal OlympusNet para recopilar una lista de silenciados para Observador.\nLos silenciados seguirán recopilándose mediante el ratón sobre la unidad, información de /who, placas de nombre y otras fuentes de unidades."
+	L["Setting_HideInvites"] = "Rechazar interacciones"
+	L["Setting_HideInvitesTT"] = "Rechaza automáticamente ciertas interacciones enviadas por miembros silenciados, como invitaciones, invitaciones de hermandad, duelos e intercambios."
 
 	L["Term_Contains"] = "Contiene"
 	L["Term_ContainsTT"] = "Coincide en cualquier parte de un mensaje, incluso dentro de otras palabras. \"gold\" también coincide con \"golden\"."
@@ -299,6 +303,8 @@ if LOCALE == "deDE" then
 	L["Setting_PauseWatcherTT"] = "Pausiert das Erfassen neuer Einträge. Bereits erfasste Einträge bleiben stummgeschaltet."
 	L["Setting_UseNetwork"] = "Kanalnetzwerk verwenden"
 	L["Setting_UseNetworkTT"] = "Verwendet den OlympusNet-Kanal, um eine Stummschaltungsliste für den Beobachter zu erfassen.\nStummschaltungen werden weiterhin über Mouseover, /who-Informationen, Namensplaketten und andere Einheitenquellen erfasst."
+	L["Setting_HideInvites"] = "Interaktionen ablehnen"
+	L["Setting_HideInvitesTT"] = "Lehnt bestimmte Interaktionen von stummgeschalteten Mitgliedern automatisch ab, wie Einladungen, Gildeneinladungen, Duelle und Handel."
 
 	L["Term_Contains"] = "Enthält"
 	L["Term_ContainsTT"] = "Stimmt an beliebiger Stelle in einer Nachricht überein, auch innerhalb anderer Wörter. \"gold\" stimmt auch mit \"golden\" überein."
@@ -404,6 +410,8 @@ if LOCALE == "frFR" then
 	L["Setting_PauseWatcherTT"] = "Met en pause la collecte de nouvelles entrées. Les entrées déjà recueillies restent réduites au silence."
 	L["Setting_UseNetwork"] = "Utiliser le réseau de canaux"
 	L["Setting_UseNetworkTT"] = "Utilise le canal OlympusNet pour recueillir une liste de personnes réduites au silence pour le surveillant.\nLes personnes réduites au silence continueront d'être recueillies via le survol de la souris, les informations /who, les plaques de nom et d'autres sources d'unités."
+	L["Setting_HideInvites"] = "Refuser les interactions"
+	L["Setting_HideInvitesTT"] = "Refuse automatiquement certaines interactions envoyées par des membres mis en sourdine, comme les invitations, les invitations de guilde, les duels et les échanges."
 
 	L["Term_Contains"] = "Contient"
 	L["Term_ContainsTT"] = "Correspond n'importe où dans un message, même à l'intérieur d'autres mots. \"gold\" correspond également à \"golden\"."
@@ -508,6 +516,8 @@ if LOCALE == "itIT" then
 	L["Setting_PauseWatcherTT"] = "Mette in pausa la raccolta di nuove voci. Le voci già raccolte rimangono silenziate."
 	L["Setting_UseNetwork"] = "Usa rete dei canali"
 	L["Setting_UseNetworkTT"] = "Utilizza il canale OlympusNet per raccogliere un elenco dei silenziati per Osservatore.\nI silenziati continueranno a essere raccolti tramite passaggio del mouse, informazioni /who, piastre dei nomi e altre fonti di unità."
+	L["Setting_HideInvites"] = "Rifiuta interazioni"
+	L["Setting_HideInvitesTT"] = "Rifiuta automaticamente alcune interazioni inviate dai membri silenziati, come inviti, inviti di gilda, duelli e scambi."
 
 	L["Term_Contains"] = "Contiene"
 	L["Term_ContainsTT"] = "Corrisponde in qualsiasi punto di un messaggio, anche all'interno di altre parole. \"gold\" corrisponde anche a \"golden\"."
@@ -612,6 +622,8 @@ if LOCALE == "ptBR" then
 	L["Setting_PauseWatcherTT"] = "Pausa a coleta de novas entradas. As entradas já coletadas continuam silenciadas."
 	L["Setting_UseNetwork"] = "Usar rede de canais"
 	L["Setting_UseNetworkTT"] = "Utiliza o canal OlympusNet para coletar uma lista de silenciados para o Observador.\nOs silenciados continuarão sendo coletados por mouseover, informações de /who, placas de identificação e outras fontes de unidades."
+	L["Setting_HideInvites"] = "Recusar interações"
+	L["Setting_HideInvitesTT"] = "Recusa automaticamente determinadas interações enviadas por membros silenciados, como convites, convites de guilda, duelos e trocas."
 
 	L["Term_Contains"] = "Contém"
 	L["Term_ContainsTT"] = "Corresponde em qualquer parte de uma mensagem, mesmo dentro de outras palavras. \"gold\" também corresponde a \"golden\"."
@@ -718,6 +730,8 @@ if LOCALE == "ruRU" then
 	L["Setting_PauseWatcherTT"] = "Приостанавливает сбор новых записей. Уже собранные записи остаются заглушёнными."
 	L["Setting_UseNetwork"] = "Использовать сеть каналов"
 	L["Setting_UseNetworkTT"] = "Использует канал OlympusNet для сбора списка заглушённых игроков для Наблюдателя.\nЗаглушённые игроки по-прежнему будут собираться через наведение мыши, информацию /who, индикаторы имени и другие источники данных об объектах."
+	L["Setting_HideInvites"] = "Отклонять взаимодействия"
+	L["Setting_HideInvitesTT"] = "Автоматически отклоняет определённые взаимодействия от заглушённых участников, такие как приглашения, приглашения в гильдию, дуэли и торговлю."
 
 	L["Term_Contains"] = "Содержит"
 	L["Term_ContainsTT"] = "Совпадает в любом месте сообщения, даже внутри других слов. \"gold\" также совпадает с \"golden\"."
@@ -822,6 +836,8 @@ if LOCALE == "koKR" then
 	L["Setting_PauseWatcherTT"] = "새로운 항목 수집을 일시정지합니다. 이미 수집된 항목은 계속 음소거됩니다."
 	L["Setting_UseNetwork"] = "채널 네트워크 사용"
 	L["Setting_UseNetworkTT"] = "OlympusNet 채널을 사용하여 감시자의 음소거 목록을 수집합니다.\n마우스 오버, /who 정보, 이름표 및 기타 유닛 소스를 통한 음소거 수집은 계속됩니다."
+	L["Setting_HideInvites"] = "상호작용 거부"
+	L["Setting_HideInvitesTT"] = "음소거한 플레이어가 보내는 초대, 길드 초대, 결투 및 거래 등의 특정 상호작용을 자동으로 거부합니다."
 
 	L["Term_Contains"] = "포함"
 	L["Term_ContainsTT"] = "다른 단어 내부를 포함하여 메시지의 어느 위치에서든 일치합니다. \"gold\"는 \"golden\"에도 일치합니다."
@@ -926,6 +942,8 @@ if LOCALE == "zhCN" then
 	L["Setting_PauseWatcherTT"] = "暂停收集新条目。已经收集的条目仍会保持屏蔽。"
 	L["Setting_UseNetwork"] = "使用频道网络"
 	L["Setting_UseNetworkTT"] = "利用 OlympusNet 频道为观察者收集屏蔽列表。\n仍会通过鼠标指向、/who 信息、姓名板和其他单位来源收集屏蔽对象。"
+	L["Setting_HideInvites"] = "拒绝互动"
+	L["Setting_HideInvitesTT"] = "自动拒绝来自已静音成员的某些互动，例如邀请、工会邀请、决斗和交易。"
 
 	L["Term_Contains"] = "包含"
 	L["Term_ContainsTT"] = "只要消息中的任意位置出现匹配即可，即使位于其他单词内部。\"gold\" 也会匹配 \"golden\"。"
@@ -1030,6 +1048,8 @@ if LOCALE == "zhTW" then
 	L["Setting_PauseWatcherTT"] = "暫停收集新項目。已收集的項目仍會保持封鎖。"
 	L["Setting_UseNetwork"] = "使用頻道網路"
 	L["Setting_UseNetworkTT"] = "利用 OlympusNet 頻道為觀察者收集封鎖名單。\n仍會透過滑鼠指向、/who 資訊、姓名板和其他單位來源收集封鎖對象。"
+	L["Setting_HideInvites"] = "拒絕互動"
+	L["Setting_HideInvitesTT"] = "自動拒絕來自已靜音成員的特定互動，例如邀請、公會邀請、決鬥和交易。"
 
 	L["Term_Contains"] = "包含"
 	L["Term_ContainsTT"] = "只要訊息中的任意位置出現匹配即可，即使位於其他單字內。「gold」也會匹配「golden」。"

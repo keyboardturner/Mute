@@ -8,6 +8,7 @@ local DefaultSettings = {
 	MuterSettings = {
 		AddContextMenu = true,
 		SpeechBubbles = true,
+		HideInvites = true,
 	},
 	WatcherSettings = {
 		Chat_Notify = false,
@@ -760,6 +761,92 @@ local function ChatFilter(self, event, msg, sender, ...)
 	return false, msg, sender, ...;
 end
 
+local inviteEventsFrame = CreateFrame("Frame");
+
+local function HidePopup(popupName)
+	StaticPopup_Hide(popupName);
+	RunNextFrame(function()
+		StaticPopup_Hide(popupName);
+	end);
+end
+
+-- guild invite is a standalone frame shown via StaticPopupSpecial_Show, not StaticPopup
+local function HideGuildInvite()
+	if GuildInviteFrame and GuildInviteFrame:IsShown() then
+		GuildInviteFrame:Hide();
+	end
+end
+
+local function HideGroupInvite()
+	StaticPopup_Hide("PARTY_INVITE");
+end
+
+local function OnInviteEvent(self, event, arg1, arg2)
+	if not Mute:GetSetting("MuterSettings", "HideInvites") then return; end
+
+	if event == "PARTY_INVITE_REQUEST" then
+		local inviterName = arg1;
+		if inviterName and Muter:IsMuted(inviterName) then
+			DeclineGroup(); -- works on its own but popup remains so need to hide
+			HideGroupInvite();
+		end
+
+	elseif event == "GUILD_INVITE_REQUEST" then
+		local inviterName, guildName = arg1, arg2;
+		if (inviterName and Muter:IsMuted(inviterName)) or (guildName and Muter:IsGuildMuted(guildName)) then
+			DeclineGuild(); --doesn't appear to be needed, but going to use it just in case
+			HideGuildInvite();
+			RunNextFrame(HideGuildInvite);
+		end
+
+	elseif event == "DUEL_REQUESTED" then
+		local opponentName = arg1; -- returns as "First-Last" instead of "First Last"
+		local isMuted = false;
+		
+		if opponentName then
+			isMuted = Muter:IsMuted(opponentName);
+
+			if not isMuted and string.find(opponentName, "%-") then
+				local alternateName = string.gsub(opponentName, "%-", " ");
+				isMuted = Muter:IsMuted(alternateName);
+			end
+		end
+
+		if isMuted then
+			CancelDuel(); -- works on its own but just goes the extra step
+			HidePopup("DUEL_REQUESTED"); -- pops up for like .5 sec before Cancel goes through, this hides it completely
+		end
+
+	elseif event == "TRADE_REQUEST" or event == "TRADE_SHOW" then
+		local name, realm = UnitName("npc");
+		local isMuted = false;
+
+		if name then
+			if realm and realm ~= "" then
+				local standardName = string.format("%s-%s", name, realm);
+				local foreverName = string.format("%s %s", name, realm);
+				
+				isMuted = Muter:IsMuted(standardName) or Muter:IsMuted(foreverName);
+			else
+				isMuted = Muter:IsMuted(name);
+			end
+
+			if isMuted then
+				CancelTrade();
+			end
+		end
+	end
+end
+
+function Muter:EnableInviteFilter()
+	inviteEventsFrame:RegisterEvent("PARTY_INVITE_REQUEST");
+	inviteEventsFrame:RegisterEvent("GUILD_INVITE_REQUEST");
+	inviteEventsFrame:RegisterEvent("DUEL_REQUESTED");
+	inviteEventsFrame:RegisterEvent("TRADE_REQUEST");
+	inviteEventsFrame:RegisterEvent("TRADE_SHOW");
+	inviteEventsFrame:SetScript("OnEvent", OnInviteEvent);
+end
+
 local chatEvents = {
 	"CHAT_MSG_CHANNEL",
 	"CHAT_MSG_SAY",
@@ -805,6 +892,7 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 		GetMutesDB();
 		Mute:InitSettings();
 		Muter:EnableChatFilter();
+		Muter:EnableInviteFilter();
 	end
 end);
 

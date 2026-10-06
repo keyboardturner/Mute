@@ -508,6 +508,15 @@ local function BuildSettingsData()
 		tooltip = L["Setting_SpeechBubblesTT"],
 	});
 
+	-- MuterSettings - HideInvites
+	table.insert(settingsData, {
+		type = "checkbox",
+		category = "MuterSettings",
+		key = "HideInvites",
+		label = L["Setting_HideInvites"],
+		tooltip = L["Setting_HideInvitesTT"],
+	});
+
 	-- Header - Watcher
 	table.insert(settingsData, {
 		type = "header",
@@ -1139,29 +1148,30 @@ function Mute:ToggleMuteList(tabID)
 	end
 end
 
-function Mute:ToggleMuteList()
-	local frame = GetStandaloneFrame();
-	frame:SetShown(not frame:IsShown());
-end
-
 SLASH_MUTELIST1 = L["SLASH_CHAT_MUTELIST1"]; -- localized
 SLASH_MUTELIST2 = L["SLASH_CHAT_MUTELIST2"]; -- english
 SlashCmdList["MUTELIST"] = function()
 	Mute:ToggleMuteList();
 end;
 
-local hooked = false;
+local SOCIAL_UI_SIDE_OFFSET = 50;
 
-local function HookIgnoreWindow()
-	if hooked then return; end
-	local window = FriendsFrame and FriendsFrame.IgnoreListWindow;
-	if not window then return; end
-	hooked = true;
+local hookedWindows = {};
+
+local function SetupIgnoreWindow(window, anchorFrame, isSocialUI)
+	if not window or hookedWindows[window] then return; end
+	hookedWindows[window] = true;
 
 	window:ClearAllPoints();
-	window:SetPoint("TOPLEFT", FriendsFrame, "TOPRIGHT", -2, 0);
+	if isSocialUI then
+		window:SetPoint("TOPLEFT", anchorFrame, "TOPRIGHT", SOCIAL_UI_SIDE_OFFSET, 0);
+	else
+		window:SetPoint("TOPLEFT", anchorFrame, "TOPRIGHT", -2, 0);
+	end
 	window:EnableMouse(true);
 	window:SetSize(300, 424);
+	-- social UI may resize itself
+	window.baseWidth, window.baseHeight = 300, 424;
 	if window.Inset then
 		window.Inset:ClearAllPoints();
 		window.Inset:SetPoint("TOPLEFT", window, "TOPLEFT", 11, -28);
@@ -1171,44 +1181,54 @@ local function HookIgnoreWindow()
 	local view = CreateMuteList(window, window.Inset);
 	view.content:Hide();
 
-	if window.UnignorePlayerButton then
-		window.UnignorePlayerButton:ClearAllPoints();
-		window.UnignorePlayerButton:SetSize(122, 22);
-		window.UnignorePlayerButton:SetPoint("BOTTOMLEFT", window, "BOTTOM", 2, 8);
+	-- old frame UnignorePlayerButton, SocialUI UnblockButton / BlockButton.
+	local unignoreButton = window.UnignorePlayerButton or window.UnblockButton;
+	local addIgnoreButton = window.BlockButton;
+
+	if unignoreButton then
+		unignoreButton:ClearAllPoints();
+		unignoreButton:SetSize(122, 22);
+		unignoreButton:SetPoint("BOTTOMLEFT", window, "BOTTOM", 2, 8);
 
 		-- require shift key
-		local origOnClick = window.UnignorePlayerButton:GetScript("OnClick");
-		window.UnignorePlayerButton:SetScript("OnClick", function(self, button, down)
+		local origOnClick = unignoreButton:GetScript("OnClick");
+		unignoreButton:SetScript("OnClick", function(self, button, down)
 			if not IsShiftKeyDown() then return; end
 			if origOnClick then
 				origOnClick(self, button, down);
 			end
 		end);
 
-		window.UnignorePlayerButton:HookScript("OnEnter", function(self)
+		unignoreButton:HookScript("OnEnter", function(self)
 			GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
 			GameTooltip:SetText(L["HoldShiftToConfirm"], 1, 0.8, 0);
 			GameTooltip:Show();
 		end);
-		window.UnignorePlayerButton:HookScript("OnLeave", GameTooltip_Hide);
+		unignoreButton:HookScript("OnLeave", GameTooltip_Hide);
 	end
 
-	local addIgnoreButton = CreateFrame("Button", nil, window, "UIPanelButtonTemplate");
-	addIgnoreButton:SetSize(122, 22);
-	addIgnoreButton:SetText(IGNORE_PLAYER);
+	if addIgnoreButton then
+		addIgnoreButton:ClearAllPoints();
+		addIgnoreButton:SetSize(122, 22);
+	else
+		addIgnoreButton = CreateFrame("Button", nil, window, "UIPanelButtonTemplate");
+		addIgnoreButton:SetSize(122, 22);
+		addIgnoreButton:SetText(IGNORE_PLAYER);
+		addIgnoreButton:SetScript("OnClick", function()
+			StaticPopup_Show("ADD_IGNORE");
+		end);
+	end
 	addIgnoreButton:SetPoint("BOTTOMRIGHT", window, "BOTTOM", -2, 8);
-	addIgnoreButton:SetScript("OnClick", function()
-		StaticPopup_Show("ADD_IGNORE");
-	end);
 
 	window.minTabWidth = window.minTabWidth or 70;
 
+	local tabNamePrefix = isSocialUI and "MuteSocialUIIgnoreWindowTab" or "MuteIgnoreWindowTab";
 	local tabs = {};
 	local extraContents = {};
 	local titles = { [1] = IGNORE_LIST, [2] = TITLE };
 
 	local function MakeTab(id, text, anchorTo)
-		local tab = CreateFrame("Button", "MuteIgnoreWindowTab" .. id, window, "PanelTabButtonTemplate");
+		local tab = CreateFrame("Button", tabNamePrefix .. id, window, "PanelTabButtonTemplate");
 		tab:SetID(id);
 		tab:SetText(text);
 		if anchorTo then
@@ -1245,9 +1265,9 @@ local function HookIgnoreWindow()
 			end
 		end
 
-		window.ScrollBox:SetShown(ignoreMode);
-		window.ScrollBar:SetShown(ignoreMode);
-		window.UnignorePlayerButton:SetShown(ignoreMode);
+		if window.ScrollBox then window.ScrollBox:SetShown(ignoreMode); end
+		if window.ScrollBar then window.ScrollBar:SetShown(ignoreMode); end
+		if unignoreButton then unignoreButton:SetShown(ignoreMode); end
 		addIgnoreButton:SetShown(ignoreMode);
 
 		view.content:SetShown(id == 2);
@@ -1256,8 +1276,14 @@ local function HookIgnoreWindow()
 		end
 		window:SetTitle(titles[id] or TITLE);
 
-		if ignoreMode and window:IsShown() and IgnoreList_Update then
-			IgnoreList_Update();
+		if ignoreMode and window:IsShown() then
+			if type(window.FullRefresh) == "function" then
+				window:FullRefresh();
+			elseif type(window.Update) == "function" then
+				window:Update();
+			elseif IgnoreList_Update then
+				IgnoreList_Update();
+			end
 		end
 	end
 
@@ -1265,6 +1291,7 @@ local function HookIgnoreWindow()
 		PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB);
 		ShowTab(self:GetID());
 	end
+
 	for _, tab in ipairs(tabs) do
 		tab:SetScript("OnClick", OnTabClick);
 	end
@@ -1276,7 +1303,18 @@ local function HookIgnoreWindow()
 	ShowTab(1);
 end
 
+-- C_SocialUI.IsSystemEnabled() checks which is enabled
+local function HookIgnoreWindow()
+	if FriendsFrame and FriendsFrame.IgnoreListWindow then
+		SetupIgnoreWindow(FriendsFrame.IgnoreListWindow, FriendsFrame, false);
+	end
+	if SocialUIFrame and SocialUIFrame.IgnoreListFrame then
+		SetupIgnoreWindow(SocialUIFrame.IgnoreListFrame, SocialUIFrame, true);
+	end
+end
+
 EventUtil.ContinueOnAddOnLoaded("Blizzard_FriendsFrame", HookIgnoreWindow);
+EventUtil.ContinueOnAddOnLoaded("Blizzard_SocialUI", HookIgnoreWindow);
 
 local eventFrame = CreateFrame("Frame");
 eventFrame:RegisterEvent("PLAYER_LOGIN");
