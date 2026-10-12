@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Mute/releases)
 
+# 0.0.3
+
+12.1.5 toc update
+
 # 0.0.2
 
 Added functionality to block various interactions such as trade, invites, guild invites, and duels.
