@@ -85,6 +85,89 @@ local function GetExceptionsDB()
 	return MuteList_DB.exceptions;
 end
 
+local isForever = (WOW_PROJECT_ID == WOW_PROJECT_CAMELOT);
+Mute.IsForever = isForever;
+
+local function CanonicalName(name)
+	if not isForever or type(name) ~= "string" or name == "" then
+		return name;
+	end
+	local parts = { strsplit("-", name) };
+	local first = strtrim(parts[1] or "");
+	if first == "" then
+		return name;
+	end
+	if first:find(" ", 1, true) then
+		return first;
+	end
+	local second = strtrim(parts[2] or "");
+	if second ~= "" then
+		return first .. " " .. second;
+	end
+	return first;
+end
+Mute.CanonicalName = CanonicalName;
+
+local nameIndexes = {};
+
+local function GetIndex(tbl, lower)
+	local idx = nameIndexes[tbl];
+	if idx then return idx; end
+	idx = {};
+	for key in pairs(tbl) do
+		if type(key) == "string" then
+			local canon = CanonicalName(key);
+			if lower then canon = canon:lower(); end
+			if canon ~= key then
+				idx[canon] = idx[canon] or {};
+				table.insert(idx[canon], key);
+			end
+		end
+	end
+	nameIndexes[tbl] = idx;
+	return idx;
+end
+
+local function FindKey(tbl, name, lower)
+	if type(name) ~= "string" or name == "" then return nil; end
+	local key = CanonicalName(name);
+	if lower then key = key:lower(); end
+	if tbl[key] ~= nil then
+		return key;
+	end
+	if isForever then
+		local list = GetIndex(tbl, lower)[key];
+		if list then
+			for _, k in ipairs(list) do
+				if tbl[k] ~= nil then
+					return k;
+				end
+			end
+		end
+	end
+	return nil;
+end
+Mute.FindKey = FindKey;
+
+local function Has(tbl, name, lower)
+	local k = FindKey(tbl, name, lower);
+	return k and tbl[k] or nil;
+end
+
+local function RemoveKeys(tbl, name, lower)
+	local key = CanonicalName(name);
+	if lower then key = key:lower(); end
+	tbl[key] = nil;
+	local idx = GetIndex(tbl, lower);
+	local list = idx[key];
+	if list then
+		for _, k in ipairs(list) do
+			tbl[k] = nil;
+		end
+		idx[key] = nil;
+	end
+end
+
 local function FormatName(name)
 	if not name or name == "" then return nil; end
 	if not string.find(name, "-") then
@@ -99,6 +182,9 @@ end
 
 function Muter:IsException(name)
 	if not name then return false; end
+	if isForever then
+		return Has(GetExceptionsDB(), name, true) and true or false;
+	end
 	local db = GetExceptionsDB();
 	local formatted = FormatName(name);
 	
@@ -120,6 +206,16 @@ end
 
 function Muter:IsMuted(name)
 	if not name then return false; end
+	if isForever then
+		if Muter:IsException(name) then
+			return false;
+		end
+		if Has(GetMutesDB(), name, false) then
+			return true;
+		end
+		local seen = WatcherData_DB and WatcherData_DB.seen;
+		return (seen and SeenEntryMutes(Has(seen, name, true))) and true or false;
+	end
 	if Muter:IsException(name) then return false; end
 
 	local db = GetMutesDB();
@@ -148,6 +244,20 @@ function Muter:IsMuted(name)
 end
 
 function Muter:AddMute(name)
+	if isForever then
+		local canon = CanonicalName(name);
+		if type(canon) ~= "string" or canon == "" then return; end
+		RemoveKeys(GetExceptionsDB(), canon, true);
+		local db = GetMutesDB();
+		if not FindKey(db, canon, false) then
+			db[canon] = true;
+		end
+		if Mute.OnMuteListChanged then
+			Mute.OnMuteListChanged();
+		end
+		Print(string.format(L["Ignore_Added"], canon));
+		return;
+	end
 	local formatted = FormatName(name);
 	if not formatted then return; end
 
@@ -168,6 +278,20 @@ function Muter:AddMute(name)
 end
 
 function Muter:RemoveMute(name)
+	if isForever then
+		local canon = CanonicalName(name);
+		if type(canon) ~= "string" or canon == "" then return; end
+		RemoveKeys(GetMutesDB(), canon, false);
+		GetExceptionsDB()[canon:lower()] = true;
+		if WatcherData_DB and WatcherData_DB.seen then
+			RemoveKeys(WatcherData_DB.seen, canon, true);
+		end
+		if Mute.OnMuteListChanged then
+			Mute.OnMuteListChanged();
+		end
+		Print(string.format(L["Ignore_Removed"], canon));
+		return;
+	end
 	local formatted = FormatName(name);
 	if not formatted then return; end
 
@@ -723,10 +847,10 @@ bubbleFrame:SetScript("OnUpdate", ChatBubble_OnUpdate);
 
 local function CloseWhisperTab(senderName)
 	if not senderName then return; end
-	local senderLower = string.lower(senderName);
+	local senderLower = string.lower(CanonicalName(senderName));
 	
 	ChatFrameUtil.ForEachChatFrame(function(chatFrame)
-		if chatFrame.isTemporary and chatFrame.chatTarget and string.lower(chatFrame.chatTarget) == senderLower then
+		if chatFrame.isTemporary and chatFrame.chatTarget and string.lower(CanonicalName(chatFrame.chatTarget)) == senderLower then
 			FCF_Close(chatFrame);
 		end
 	end);
@@ -922,7 +1046,7 @@ local function MutePlayerPastMessages(targetPlayerName)
 		
 		local sender = eventArgs[2];
 		
-		return type(sender) == "string" and sender == targetPlayerName;
+		return type(sender) == "string" and CanonicalName(sender) == CanonicalName(targetPlayerName);
 	end
 
 	local function SetMutedMessage(message, r, g, b, infoID, accessID, typeID, event, eventArgs, MessageFormatter, ...)

@@ -13,6 +13,10 @@ local function SortByName(a, b)
 	return a.name:lower() < b.name:lower();
 end
 
+local function CN(name)
+	return Mute.CanonicalName and Mute.CanonicalName(name) or name;
+end
+
 local function BuildData()
 	local dataProvider = CreateDataProvider();
 	local existing, total = {}, 0;
@@ -20,6 +24,9 @@ local function BuildData()
 	local exceptions = MuteList_DB and MuteList_DB.exceptions or {};
 	local function IsExcepted(name)
 		if not name then return false; end
+		if Mute.IsForever then
+			return Mute.Muter:IsException(name);
+		end
 		local nLower = name:lower()
 		if exceptions[nLower] then return true; end
 		local shortName = string.match(nLower, "^([^-]+)");
@@ -32,8 +39,11 @@ local function BuildData()
 	if mutes then
 		for name, isMuted in pairs(mutes) do
 			if isMuted then
-				manual[#manual + 1] = { key = name, name = name };
-				manualLower[name:lower()] = true;
+				local canon = CN(name):lower();
+				if not (Mute.IsForever and manualLower[canon]) then
+					manual[#manual + 1] = { key = name, name = name };
+				end
+				manualLower[canon] = true;
 			end
 		end
 	end
@@ -69,9 +79,12 @@ local function BuildData()
 	local unknownWatcher = { key = "WATCHER_GUILD_UNKNOWN", name = "OlympusNet", isGuild = true, isWatcherGuild = true, children = {} };
 	local watcherPlayerCount = 0;
 	local seen = WatcherData_DB and WatcherData_DB.seen;
+	local seenCanon = {};
 	if seen then
 		for key, entry in pairs(seen) do
-			if not manualLower[key] then
+			local canonKey = CN(key):lower();
+			if not manualLower[canonKey] and not seenCanon[canonKey] then
+				seenCanon[canonKey] = true;
 				local isExcepted = IsExcepted(key);
 				local name = (type(entry) == "table" and entry.name) or key;
 				local gName = (type(entry) == "table" and entry.guild) or nil;
@@ -215,7 +228,7 @@ local function Row_OnEnter(self)
 	if not data then return; end
 
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
-	GameTooltip:SetText(data.name, 1, 1, 1);
+	GameTooltip:SetText((data.isGuild or not Mute.IsForever) and data.name or CN(data.name), 1, 1, 1);
 
 	if data.isGuild then
 		if data.isWatcherGuild then
@@ -338,9 +351,14 @@ local function InitRow(row, data)
 			row.Text:SetPoint("RIGHT", row.Realm, "LEFT", -4, 0);
 		end
 		
-		local short, realm = string.match(data.name, "^([^-]+)-(.+)$");
-		row.Text:SetText(short or data.name);
-		row.Realm:SetText(realm or "");
+		if Mute.IsForever then
+			row.Text:SetText(CN(data.name));
+			row.Realm:SetText("");
+		else
+			local short, realm = string.match(data.name, "^([^-]+)-(.+)$");
+			row.Text:SetText(short or data.name);
+			row.Realm:SetText(realm or "");
+		end
 	end
 	UpdateRowSelection(row);
 end

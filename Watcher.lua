@@ -9,6 +9,7 @@ Print = Mute.Print;
 local isMainline = (WOW_PROJECT_ID == 1 or WOW_PROJECT_ID == WOW_PROJECT_MAINLINE);
 local isForever = (WOW_PROJECT_ID == WOW_PROJECT_CAMELOT);
 local HAS_NETWORK = isForever;
+local CanonicalName = Mute.CanonicalName or function(n) return n; end;
 Mute.HasNetwork = HAS_NETWORK;
 
 --[[
@@ -77,6 +78,9 @@ local function Normalize(name)
 	if type(name) ~= "string" or name == "" then
 		return nil;
 	end
+	if isForever then
+		return CanonicalName(name):lower();
+	end
 	if not name:find("-", 1, true) then
 		local realm = GetNormalizedRealmName and GetNormalizedRealmName();
 		if realm then
@@ -125,6 +129,10 @@ local function Log(name, source, guild, flag)
 	name = Plain(name);
 	local key = Normalize(name);
 	if not key then return; end
+	if isForever then
+		name = CanonicalName(name);
+		key = Mute.FindKey and Mute.FindKey(seen, name, true) or key;
+	end
 	local now = time();
 	local e = seen[key];
 	local new = not e;
@@ -177,7 +185,11 @@ local function NoteGuild(guild, sender, info)
 	end
 	g.last = time();
 	local s = Normalize(sender);
-	if s and not g.senders[s] then
+	local known = s and g.senders[s];
+	if s and isForever and not known and Mute.FindKey then
+		known = Mute.FindKey(g.senders, s, true);
+	end
+	if s and not known then
 		g.senders[s] = true;
 		g.nsenders = g.nsenders + 1;
 	end
@@ -315,7 +327,7 @@ local function HandleReport(sender, payload)
 	if not IsTargetGuild(guild) then return; end
 	if Mute.Muter and Mute.Muter:IsGuildExcepted(guild) then return; end
 
-	local realm = RealmField(f[22]) or RealmField(f[21]);
+	local realm = (not isForever) and (RealmField(f[22]) or RealmField(f[21])) or nil;
 	NoteGuild(guild, sender, { total = tonumber(f[3]), home = realm });
 
 	local function add(raw, src)

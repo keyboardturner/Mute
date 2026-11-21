@@ -1,5 +1,9 @@
 [Full Changelog & Previous Releases](https://github.com/keyboardturner/Mute/releases)
 
+# 0.0.3a
+
+Possible fix to recent changes regarding lack of realm name / realm ID
+
 # 0.0.3
 
 12.1.5 toc update
